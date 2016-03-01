@@ -23,7 +23,7 @@ with geospatial indexing.
 Environment variables may be used for [MONGO_HOST, MONGO_DATABASE, MONGO_USERNAME, MONGO_PASSWORD].
 Note:  these will override any value set within settings.py but not arguments to the program
 
-Ex: `~/git/grits-net-consume$ MONGO_HOST='10.0.1.2' python birt_consume.py`
+Ex: `~/git/birt-consume$ MONGO_HOST='10.0.1.2' python birt_consume.py`
 
 ### settings.py
 
@@ -41,7 +41,7 @@ User defined settings may be set within `conf/settings.py`, which include:
   _DISABLE_SCHEMA_MATCH #boolean, raise exception for headers not in the schema?
   _CHUNK_SIZE #integer, number of lines to split the input file
   _MONGO_HOST #string, default command-line option for when -m is not specified ex. 'localhost'
-  _MONGO_DATABASE #string, default command-line option for when -d is not specified ex. 'grits'
+  _MONGO_DATABASE #string, default command-line option for when -d is not specified ex. 'birt'
   _MONGO_USERNAME #string or None, default command-line option for when -u is not specified ex. None
   # Warning: this will be stored in plain-text
   _MONGO_PASSWORD #string or None, default command-line option for when -p is not specified ex. None
@@ -109,7 +109,7 @@ User defined settings may be set within `conf/settings.py`, which include:
       -p PASSWORD, --password PASSWORD
                             the password for mongoDB (Default: None)
       -d DATABASE, --database DATABASE
-                            the database for mongoDB (Default: grits)
+                            the database for mongoDB (Default: birt)
       -m MONGOHOST, --mongohost MONGOHOST
                             the hostname for mongoDB (Default: localhost)
   ```

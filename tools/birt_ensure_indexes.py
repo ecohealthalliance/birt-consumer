@@ -25,8 +25,8 @@ class BirtEnsureIndexes(object):
             help='the password for mongoDB (Default: None)')
 
         self.parser.add_argument('-d', '--database',
-            default='grits',
-            help='the database for mongoDB (Default: grits)')
+            default='birt',
+            help='the database for mongoDB (Default: birt)')
 
         self.parser.add_argument('-m', '--mongohost',
             default='localhost',
