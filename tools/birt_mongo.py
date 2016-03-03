@@ -58,6 +58,27 @@ class BirtMongoConnection(object):
         # recreates the indexes
         nodes = pymongo.collection.Collection(self._db, settings._NODE_COLLECTION_NAME)
         nodes.create_index([("loc", pymongo.GEOSPHERE)])
+        nodes.create_index([
+            ("_id", pymongo.ASCENDING),
+            ("primary_com_name", pymongo.TEXT),
+            ("species_name", pymongo.TEXT),
+            ("genus_name", pymongo.TEXT),
+            ("category", pymongo.TEXT),
+            ("family_name", pymongo.TEXT),
+            ("order_name", pymongo.TEXT),
+            ("subfamily_name", pymongo.TEXT),
+            ("taxon_order", pymongo.TEXT)
+            ], weights={
+            "taxon_order": 1,
+            "subfamily_name": 2,
+            "order_name": 3,
+            "family_name": 4,
+            "category": 5,
+            "genus_name": 6,
+            "species_name": 7,
+            "primary_com_name": 8,
+            "_id": 9
+            }, name="idxTypeahead")
         paths = pymongo.collection.Collection(self._db, settings._PATH_COLLECTION_NAME)
         paths.create_index([
             ("year", pymongo.ASCENDING),
