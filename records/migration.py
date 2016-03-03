@@ -56,14 +56,14 @@ class MigrationChecklistRecord(Record):
         """ the cerberus schema definition used for validation of this record """
         return {
             # _id is samplingEventID
-            'loc_id' : { 'type': 'string', 'nullable': False, 'required': True},
+            'loc_id' : { 'type': 'string', 'nullable': True, 'required': False},
             'loc': { 'type': 'dict', 'schema': {
                 'type': {'type': 'string'},
                 'coordinates': {'type': 'list'}}, 'nullable': False},
             'year' : { 'type': 'integer', 'nullable': False, 'required': True},
             'month' : { 'type': 'integer', 'nullable': False, 'required': True},
             'day' : { 'type': 'integer', 'nullable': False, 'required': True},
-            'time' : { 'type': 'number', 'nullable': False, 'required': True},
+            'time' : { 'type': 'number', 'nullable': True},
             'country' : { 'type': 'string', 'nullable': True},
             'state_province' : { 'type': 'string', 'nullable': True},
             'county' : { 'type': 'string', 'nullable': True},
@@ -160,10 +160,11 @@ class MigrationChecklistRecord(Record):
             # we create unmappeded schema header as nullable integers to
             # represent the taxonomy counts
             if header == None:
+                sanitized = Record.sanitize_key(unmappedHeader)
                 if self.could_be_int(field):
-                    self.fields[unmappedHeader] = int(field)
+                    self.fields[sanitized] = int(field)
                 else:
-                    self.fields[unmappedHeader] = None
+                    self.fields[sanitized] = None
                 continue
 
             # we ignore empty headers
@@ -247,7 +248,7 @@ class MigrationCoreRecord(Record):
         """ the cerberus schema definition used for validation of this record """
         return {
             # _id is sampling_event_id
-            'loc_id': { 'type': 'string', 'nullable': False, 'required': True},
+            'loc_id': { 'type': 'string', 'nullable': True},
             'pop00_sqmi': { 'type': 'number', 'nullable': True},
             'housing_density': { 'type': 'number', 'nullable': True},
             'housing_percent_vacant': { 'type': 'number', 'nullable': True},
@@ -319,10 +320,11 @@ class MigrationCoreRecord(Record):
             # we create unmappeded schema header as nullable numbers to
             # represent the NLCD* headers
             if header == None:
+                sanitized = Record.sanitize_key(unmappedHeader)
                 if self.could_be_number(field):
-                    self.fields[unmappedHeader] = float(field)
+                    self.fields[sanitized] = float(field)
                 else:
-                    self.fields[unmappedHeader] = None
+                    self.fields[sanitized] = None
                 continue
 
             # we ignore empty headers

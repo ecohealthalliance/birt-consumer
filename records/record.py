@@ -242,6 +242,10 @@ class Record(object):
             return bool(field)
         return None
 
+    @staticmethod
+    def sanitize_key(key):
+        return key.replace('.','')
+
     def set_field_by_schema(self, header, field):
         """ allows the records field to be set by matching against the schema
 
