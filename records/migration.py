@@ -1,6 +1,6 @@
 import logging
 
-from datetime import datetime
+from datetime import datetime, timedelta
 from cerberus import Validator
 from conf import settings
 
@@ -122,6 +122,22 @@ class MigrationChecklistRecord(Record):
 
         return True
 
+    def gen_date(self):
+        """ generate a datetime object from the fields year, month, and day """
+        if len(self.fields) == 0:
+            return
+
+        if self.validator.validate(self.fields) == False:
+            return
+
+        date = None
+        try:
+            theYear = datetime(self.fields['year'], 1, 1)
+            date = theYear + timedelta(days=self.fields['day'] - 1)
+        except ValueError as e:
+            logging.info('Invalid date: year: %r, day: %r', self.fields['year'], self.fields['day'])
+        return date
+
     def create(self, row):
         """ populate the fields with the row data
 
@@ -162,9 +178,9 @@ class MigrationChecklistRecord(Record):
             if header == None:
                 sanitized = Record.sanitize_key(unmappedHeader)
                 if self.could_be_int(field):
-                    self.fields[sanitized] = int(field)
-                else:
-                    self.fields[sanitized] = None
+                    value = int(field)
+                    if value > 0:
+                        self.fields[sanitized] = int(field)
                 continue
 
             # we ignore empty headers
@@ -202,6 +218,9 @@ class MigrationChecklistRecord(Record):
 
         #add the geoJSON 'loc'
         self.fields['loc'] = loc
+
+        #add the generated date
+        self.fields['date'] = self.gen_date()
 
 class MigrationCoreType(object):
     """ class that represents the .csv format of a birt core migration type """
