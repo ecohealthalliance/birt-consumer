@@ -81,9 +81,7 @@ class BirtMongoConnection(object):
             }, name="idxTypeahead")
         paths = pymongo.collection.Collection(self._db, settings._PATH_COLLECTION_NAME)
         paths.create_index([
-            ("year", pymongo.ASCENDING),
-            ("month", pymongo.ASCENDING),
-            ("day", pymongo.ASCENDING),
+            ("date", pymongo.ASCENDING)
         ])
         return "Indexes have been applied."
 
