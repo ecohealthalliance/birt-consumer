@@ -74,7 +74,8 @@ class MigrationChecklistRecord(Record):
             'observer_id' : { 'type': 'string', 'nullable': True},
             'number_observers' : { 'type': 'integer', 'nullable': True},
             'group_id' : { 'type': 'string', 'nullable': True},
-            'primary_checklist_flag' : { 'type': 'boolean', 'nullable': True}}
+            'primary_checklist_flag' : { 'type': 'boolean', 'nullable': True},
+            'sightings': { 'type': 'list'}}
 
     def __init__(self, header_row, provider_map, collection_name, row_count, mongo_connection):
         """ MigrationChecklistRecord constructor
@@ -167,6 +168,8 @@ class MigrationChecklistRecord(Record):
         # default coordinates are null
         coordinates = [None, None]
 
+        self.fields['sightings'] = []
+
         position = 0
         for field in row:
             unmappedHeader = self.header_row[position]
@@ -181,6 +184,10 @@ class MigrationChecklistRecord(Record):
                     value = int(field)
                     if value > 0:
                         self.fields[sanitized] = int(field)
+                        self.fields['sightings'].append({
+                            'bird_id': sanitized,
+                            'count': int(field)
+                        })
                 continue
 
             # we ignore empty headers
